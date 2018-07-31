@@ -67,7 +67,7 @@ export default class Popular extends React.Component {
                 />
                 {this.state.repos
                     ? <RepoGrid repos={this.state.repos}/>
-                    : <Loading/>
+                    : <Loading className='loading'/>
                 }
             </div>
         )
