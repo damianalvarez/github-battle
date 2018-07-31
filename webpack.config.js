@@ -1,6 +1,9 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-module.exports = {
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+var webpack = require('webpack');
+
+var config = {
   entry: './app/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -21,5 +24,20 @@ module.exports = {
   devServer: {
     historyApiFallback: true
   },
+  optimization: {
+    minimizer: [new UglifyJsPlugin()]
+  },
   mode: "development"
 };
+
+if (process.env.NODE_ENV === 'production') {
+  config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    })
+  )
+}
+
+module.exports = config;

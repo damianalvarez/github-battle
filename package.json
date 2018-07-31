@@ -4,13 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
-    "start": "webpack-dev-server --open"
+    "build": "NODE_ENV='production' webpack -p",
+    "start": "webpack-dev-server --open",
+    "deploy": "yarn run build && firebase deploy",
+    "firebase-init": "firebase login && firebase init"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
+    "firebase-tools": "^4.0.1",
     "prop-types": "^15.6.1",
     "query-string": "^6.1.0",
     "react": "^16.4.0",
