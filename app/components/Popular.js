@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Loading from './Loading'
 import RepoGrid from './RepoGrid'
 import API from '../utils/api'
 
 const SelectLanguage = (props) => {
-
+    
     const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
 
     return (
@@ -31,6 +32,7 @@ export default class Popular extends React.Component {
     
     constructor(props) {
         super(props)
+        
         this.state = {
             selectedLanguage: 'All',
             repos: null
@@ -50,7 +52,6 @@ export default class Popular extends React.Component {
 
         API.fetchPopularRepos(lang)
             .then((repos) => {
-                console.log(repos)
                 this.setState({
                     repos: repos
                 })
@@ -66,7 +67,7 @@ export default class Popular extends React.Component {
                 />
                 {this.state.repos
                     ? <RepoGrid repos={this.state.repos}/>
-                    : <p>Loading...</p>
+                    : <Loading/>
                 }
             </div>
         )
