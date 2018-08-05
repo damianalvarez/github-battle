@@ -6,9 +6,7 @@ import Loading from './Loading'
 import PlayerPreview from './PlayerPreview';
 import API from '../utils/api'
 
-const Profile = props => {
-
-    const info = props.info
+const Profile = ({ info }) => {
 
     return (
         <PlayerPreview
@@ -32,11 +30,11 @@ Profile.propTypes = {
     info: PropTypes.object.isRequired
 }
 
-const Player = props => (
+const Player = ({ label, score, profile }) => (
     <div>
-        <h1 className='header'>{props.label}</h1>
-        <h3 className='player'>Score: {props.score}</h3>
-        <Profile info={props.profile} />
+        <h1 className='header'>{label}</h1>
+        <h3 className='player'>Score: {score}</h3>
+        <Profile info={profile} />
     </div>
 )
 
@@ -60,13 +58,13 @@ class Results extends React.Component {
     }
 
     componentDidMount() {
-        const players = queryString.parse(this.props.location.search)
+        const { playerOneName, playerTwoName } = queryString.parse(this.props.location.search)
         API.battle([
-            players.playerOneName,
-            players.playerTwoName
+            playerOneName,
+            playerTwoName
         ]).then(results => {
             if (results === null) {
-                this.setState({
+                return this.setState({
                     error: 'Looks like there was an error. Check that both users exist on GitHub.',
                     loading: false
                 })
@@ -82,10 +80,7 @@ class Results extends React.Component {
     }
 
     render() {
-        const error = this.state.error
-        const winner = this.state.winner
-        const loser = this.state.loser
-        const loading = this.state.loading
+        const { error, winner, loser, loading } = this.state
 
         if (loading) {
             return <Loading className='loading'/>
