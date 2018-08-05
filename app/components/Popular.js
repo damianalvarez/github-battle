@@ -4,7 +4,7 @@ import Loading from './Loading'
 import RepoGrid from './RepoGrid'
 import API from '../utils/api'
 
-const SelectLanguage = (props) => {
+const SelectLanguage = ({ onSelect, selectedLanguage }) => {
     
     const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
 
@@ -13,8 +13,8 @@ const SelectLanguage = (props) => {
             {languages.map(lang => {
                 return (
                     <li key={lang}
-                        onClick={() => props.onSelect(lang)}
-                        className={(props.selectedLanguage === lang ? 'active' : '')}>
+                        onClick={() => onSelect(lang)}
+                        className={(selectedLanguage === lang ? 'active' : '')}>
                         {lang}
                     </li>
                 )
@@ -50,23 +50,20 @@ export default class Popular extends React.Component {
             repos: null
         })
 
-        API.fetchPopularRepos(lang)
-            .then((repos) => {
-                this.setState({
-                    repos: repos
-                })
-            })
+        API.fetchPopularRepos(lang).then((repos) => this.setState({ repos }))
     }
 
     render() {
+
+        const { selectedLanguage, repos } = this.state
         return (
             <div>
                 <SelectLanguage 
-                    selectedLanguage={this.state.selectedLanguage}
+                    selectedLanguage={selectedLanguage}
                     onSelect={this.updateLanguage}
                 />
-                {this.state.repos
-                    ? <RepoGrid repos={this.state.repos}/>
+                {repos
+                    ? <RepoGrid repos={repos}/>
                     : <Loading className='loading'/>
                 }
             </div>
