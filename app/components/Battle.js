@@ -33,21 +33,24 @@ class PlayerInput extends React.Component {
     }
 
     render() {
+        const { label } = this.props
+        const { username } = this.state
+
         return (
             <form className='column' onSubmit={this.handleSubmit}>
-                <label className='header' htmlFor='username'>{this.props.label}</label>
+                <label className='header' htmlFor='username'>{label}</label>
                 <input 
                     id='username' 
                     placeholder='github username'
                     type='text'
                     autoComplete='off'
-                    value={this.state.username}
+                    value={username}
                     onChange={this.handleChange}
                 />
                 <button
                     className='button'
                     type='submit'
-                    disabled={!this.state.username}
+                    disabled={!username}
                 >
                     Submit
                 </button>
@@ -79,28 +82,27 @@ export default class Battle extends React.Component {
     }
 
     handleSubmit(id, username) {
-        this.setState(() => {
-            const newState = {}
-            newState[id + 'Name'] = username
-            newState[id + 'Image'] = 'https://github.com/' + username + '.png/?size=200'
-            return newState
+        this.setState({
+            [id + 'Name']: username,
+            [id + 'Image']: `https://github.com/${username}.png/?size=200`
         })
     }
 
     handleReset(id) {
-        this.setState(() => {
-            const newState = {}
-            newState[id + 'Name'] = ''
-            newState[id + 'Image'] = null
-            return newState
+        this.setState({
+            [id + 'Name']: '',
+            [id + 'Image']: null
         })
     }
 
     render() {
-        const playerOneName = this.state.playerOneName
-        const playerOneImage = this.state.playerOneImage
-        const playerTwoName = this.state.playerTwoName
-        const playerTwoImage = this.state.playerTwoImage
+        const { 
+            playerOneName,
+            playerOneImage,
+            playerTwoName,
+            playerTwoImage 
+        } = this.state
+        const { match } = this.props
 
         return (
             <div>
@@ -116,13 +118,14 @@ export default class Battle extends React.Component {
                     { playerOneImage !== null && 
                         <PlayerPreview
                             id='playerOne'
-                            username={this.state.playerOneName}
-                            avatar={this.state.playerOneImage}
+                            username={playerOneName}
+                            avatar={playerOneImage}
                             onReset={this.handleReset}
                         >
                         <button
                             className='reset'
-                            onClick={() => this.handleReset('playerOne')}>
+                            onClick={() => this.handleReset('playerOne')}
+                        >
                             Reset
                         </button>
                         </PlayerPreview>
@@ -139,13 +142,14 @@ export default class Battle extends React.Component {
                     { playerTwoImage !== null && 
                         <PlayerPreview
                             id='playerTwo'
-                            username={this.state.playerTwoName}
-                            avatar={this.state.playerTwoImage}
+                            username={playerTwoName}
+                            avatar={playerTwoImage}
                             onReset={this.handleReset}
                         >
                         <button
                             className='reset'
-                            onClick={() => this.handleReset('playerTwo')}>
+                            onClick={() => this.handleReset('playerTwo')}
+                        >
                             Reset
                         </button>
                         </PlayerPreview>
@@ -155,9 +159,10 @@ export default class Battle extends React.Component {
                     <Link
                         className='button'
                         to={{
-                            pathname: this.props.match.url + '/results',
-                            search: '?playerOneName=' + playerOneName + '&playerTwoName=' + playerTwoName
-                    }}>
+                            pathname: `${match.url}/results`,
+                            search: `?playerOneName=${playerOneName}&playerTwoName=${playerTwoName}`
+                        }}
+                    >
                         Battle
                     </Link>
                 }
