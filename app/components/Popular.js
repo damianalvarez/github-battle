@@ -8,6 +8,11 @@ const SelectLanguage = ({ onSelect, selectedLanguage }) => {
     
     const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
 
+    propTypes = {
+        selectedLanguage: PropTypes.string.isRequired,
+        onSelect: PropTypes.func.isRequired
+    }
+
     return (
         <ul className='languages'>
             {languages.map(lang => {
@@ -23,28 +28,18 @@ const SelectLanguage = ({ onSelect, selectedLanguage }) => {
     )
 }
 
-SelectLanguage.propTypes = {
-    selectedLanguage: PropTypes.string.isRequired,
-    onSelect: PropTypes.func.isRequired
-}
-
 export default class Popular extends React.Component {
     
-    constructor(props) {
-        super(props)
-        
-        this.state = {
-            selectedLanguage: 'All',
-            repos: null
-        }
-        this.updateLanguage = this.updateLanguage.bind(this)
+    state = {
+        selectedLanguage: 'All',
+        repos: null
     }
 
     componentDidMount() {
         this.updateLanguage(this.state.selectedLanguage)
     }
 
-    updateLanguage(lang) {
+    updateLanguage = (lang) => {
         this.setState({
             selectedLanguage: lang,
             repos: null
@@ -54,8 +49,8 @@ export default class Popular extends React.Component {
     }
 
     render() {
-
         const { selectedLanguage, repos } = this.state
+        
         return (
             <div>
                 <SelectLanguage 

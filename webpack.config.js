@@ -19,7 +19,8 @@ var config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'app/index.html'
-    })
+    }),
+    'transform-class-properties'
   ],
   devServer: {
     historyApiFallback: true
