@@ -12,7 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-polyfill": "^6.26.0",
     "firebase-tools": "^4.0.1",
@@ -20,7 +19,8 @@
     "query-string": "^6.1.0",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
+    "whatwg-fetch": "^2.0.4"
   },
   "babel": {
     "presets": [

@@ -1,21 +1,21 @@
-import axios from 'axios'
-
 const id = ''
 const secretKey = ''
 const params = `?client_id=${id}&client_secret=${secretKey}`
 
-const getProfile = username => {
-    return axios.get(`https://api.github.com/users/${username}${params}`)
-        .then(({ data }) => data)
+async function getProfile(username) {
+    const response = await fetch(`https://api.github.com/users/${username}${params}`)
+
+    return response.json()
 }
 
-const getRepos = username => {
-    return axios.get(`https://api.github.com/users/${username}/
-        repos${params}&per_page=100`)
+async function getRepos(username) {
+    const response = fetch(`https://api.github.com/users/${username}/repos${params}&per_page=100`)
+
+    return response.json()
 }
 
 const getStarsCount = repos => {
-    return repos.data.reduce((count, { stargazers_count }) => {
+    return repos.reduce((count, { stargazers_count }) => {
         return count + stargazers_count, 0
     })
 }
@@ -29,29 +29,35 @@ const handleError = error => {
     return null
 }
 
-const getUserData = player => 
-    Promise.all([
+async function getUserData(player) {
+    const [ profile, repos ] = await Promise.all([
         getProfile(player),
         getRepos(player)
-    ]).then(([ profile, repos ]) => ({
+    ])
+
+    return { 
         profile,
         score: calculateScore(profile, repos)
-    }))
+    }
+}
 
 const sortPlayers = players => players.sort((a, b) => b.score - a.score)
   
 const API = {
-    battle(players) {
-        return Promise.all(players.map(getUserData))
-                    .then(sortPlayers)
-                    .catch(handleError)
+    async battle(players) {
+        const results = await Promise.all(players.map(getUserData))
+            .catch(handleError)
+
+        return results === null ? results : sortPlayers(results)
     },
-    fetchPopularRepos(language) {
-        const encodedURI = window.encodeURI(`https://api.github.com/search/
-            repositories?q=stars:>1+language:${language}
-            &sort=stars&order=desc&type=Repositories`)
-        
-        return axios.get(encodedURI).then(({ data }) => data.items)
+    async fetchPopularRepos(language) {
+        const encodedURI = window.encodeURI(`https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`)
+        const response = await fetch(encodedURI)
+            .catch(handleError)
+        const repos = await response.json()
+
+        return repos.items
+
     }
 }
 
