@@ -5,13 +5,8 @@ import RepoGrid from './RepoGrid'
 import API from '../utils/api'
 
 const SelectLanguage = ({ onSelect, selectedLanguage }) => {
-    
-    const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
 
-    propTypes = {
-        selectedLanguage: PropTypes.string.isRequired,
-        onSelect: PropTypes.func.isRequired
-    }
+    const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
 
     return (
         <ul className='languages'>
@@ -28,6 +23,11 @@ const SelectLanguage = ({ onSelect, selectedLanguage }) => {
     )
 }
 
+SelectLanguage.propTypes = {
+    selectedLanguage: PropTypes.string.isRequired,
+    onSelect: PropTypes.func.isRequired
+}
+
 export default class Popular extends React.Component {
     
     state = {
@@ -39,13 +39,15 @@ export default class Popular extends React.Component {
         this.updateLanguage(this.state.selectedLanguage)
     }
 
-    updateLanguage = (lang) => {
+    updateLanguage = async (lang) => {
         this.setState({
             selectedLanguage: lang,
             repos: null
         })
 
-        API.fetchPopularRepos(lang).then((repos) => this.setState({ repos }))
+        const repos = await API.fetchPopularRepos(lang)
+
+        this.setState({ repos })
     }
 
     render() {

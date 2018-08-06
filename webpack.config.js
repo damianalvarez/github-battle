@@ -12,15 +12,14 @@ var config = {
   },
   module: {
     rules: [
-      { test: /\.(js)$/, use: 'babel-loader', exclude: /node_modules/, },
+      { test: /\.(js)$/, use: [ 'babel-loader' ], exclude: /node_modules/, },
       { test: /\.css$/, use: [ 'style-loader', 'css-loader' ]},
     ]
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'app/index.html'
-    }),
-    'transform-class-properties'
+    })
   ],
   devServer: {
     historyApiFallback: true
